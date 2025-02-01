@@ -1,4 +1,4 @@
-package com.example.swipeassignment.data.repository
+package com.example.swipeassignment.data.network.repository
 
 import com.example.swipeassignment.data.network.service.ProductService
 import com.example.swipeassignment.data.network.utils.safeApiCall

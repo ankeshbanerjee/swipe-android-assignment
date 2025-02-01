@@ -62,11 +62,6 @@ private fun ProductsScreenContent(
     navigateToAddProduct: () -> Unit,
 ) {
 
-    if (uiState == UiState.LOADING){
-        LoadingComponent()
-        return
-    }
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -80,6 +75,11 @@ private fun ProductsScreenContent(
             }
         }
     ) {
+        if (uiState == UiState.LOADING){
+            LoadingComponent()
+            return@Scaffold
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -12,6 +12,6 @@ val viewModelsModule = module {
         ProductsViewModel(androidContext(), get())
     }
     viewModel {
-        AddProductViewModel(androidContext(),get())
+        AddProductViewModel(androidContext(),get(), get())
     }
 }

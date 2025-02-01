@@ -6,14 +6,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.swipeassignment.data.network.model.product.Product
 import com.example.swipeassignment.data.network.utils.Resource
-import com.example.swipeassignment.data.repository.ProductRepository
+import com.example.swipeassignment.data.network.repository.ProductRepository
 import com.example.swipeassignment.utils.UiState
+import com.example.swipeassignment.utils.isNetworkAvailable
 import com.example.swipeassignment.utils.showToast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class ProductsViewModel (
+class ProductsViewModel(
     private val appContext: Context,
     private val productRepository: ProductRepository
 ) : ViewModel() {
@@ -28,9 +29,13 @@ class ProductsViewModel (
     }
 
     private fun getProducts() {
+        if (!isNetworkAvailable(appContext)) {
+            showToast(appContext, "No internet connection")
+            return
+        }
         viewModelScope.launch {
             productRepository.getProducts().collect { response ->
-                when(response) {
+                when (response) {
                     is Resource.Success -> {
                         response.data.also { res ->
                             val responseBody = res.body()
@@ -42,12 +47,14 @@ class ProductsViewModel (
                             _uiState.value = UiState.SUCCESS
                         }
                     }
+
                     is Resource.Error -> {
                         response.message?.let {
                             Log.e("GET_PRODUCTS_ERROR", it)
                             showToast(appContext, it)
                         }
                     }
+
                     is Resource.Loading -> {
                         _uiState.value = UiState.LOADING
                     }

@@ -1,7 +1,7 @@
 package com.example.swipeassignment.di.modules
 
 import com.example.swipeassignment.data.network.service.ProductService
-import com.example.swipeassignment.data.repository.ProductRepository
+import com.example.swipeassignment.data.network.repository.ProductRepository
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
