@@ -12,6 +12,7 @@ import com.example.swipeassignment.utils.isNetworkAvailable
 import com.example.swipeassignment.utils.showToast
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class ProductsViewModel(
@@ -28,7 +29,12 @@ class ProductsViewModel(
         getProducts()
     }
 
-    private fun getProducts() {
+    fun refreshProducts() {
+        _products.update { emptyList() }
+        getProducts(refresh = true)
+    }
+
+    private fun getProducts(refresh: Boolean = false) {
         if (!isNetworkAvailable(appContext)) {
             showToast(appContext, "No internet connection")
             return
@@ -56,7 +62,7 @@ class ProductsViewModel(
                     }
 
                     is Resource.Loading -> {
-                        _uiState.value = UiState.LOADING
+                        _uiState.value = if (refresh) UiState.REFRESHING else UiState.LOADING
                     }
                 }
             }

@@ -79,4 +79,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     // work manager
     implementation(libs.androidx.work)
+    // material 3
+    implementation(libs.compose.material3)
 }
