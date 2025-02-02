@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -34,16 +36,23 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.toSize
 import com.example.swipeassignment.LocalNavController
 import com.example.swipeassignment.Products
 import com.example.swipeassignment.ui.common.shared_components.CustomOutlinedTextInput
@@ -73,7 +82,7 @@ fun AddProductScreen(vm: AddProductViewModel = koinViewModel()) {
     val uiState by vm.uiState.collectAsState()
     val handleAddProduct = {
         vm.handleAddProduct {
-            navController.navigate(Products){
+            navController.navigate(Products) {
                 popUpTo(0)
             }
         }
@@ -142,7 +151,7 @@ fun AddProductScreenContent(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
-    ) {
+    ) { it ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -152,44 +161,44 @@ fun AddProductScreenContent(
                 .padding(horizontal = 16.dp)
                 .padding(top = 16.dp)
         ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .clip(RoundedCornerShape(4.dp))
-                    .border(1.dp, MaterialTheme.colorScheme.secondaryContainer)
-                    .clickable {
-                        toggleDropDown()
-                    }
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            ) {
-                Text(text = selectedProduct)
-                Icon(
-                    if (isDropDownExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                    contentDescription = null
-                )
-            }
-            val context = LocalContext.current
-            val pickMedia =
-                rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-                    if (uri != null) {
-                        val file = getFileFromUri(contentResolver = context.contentResolver, uri = uri)
-                        setImage(file)
-                    }
-                }
-            DropdownMenu(
-                expanded = isDropDownExpanded,
-                onDismissRequest = { toggleDropDown() },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                productsList.forEach { label ->
-                    DropdownMenuItem(
-                        text = { Text(label) },
-                        onClick = {
-                            setSelectedProduct(label)
+            Box {
+                var dropDownMenuSize by remember { mutableStateOf(Size.Zero) }
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(4.dp))
+                        .border(1.dp, MaterialTheme.colorScheme.secondaryContainer)
+                        .clickable {
                             toggleDropDown()
-                        })
+                        }
+                        .onGloballyPositioned { coords ->
+                            dropDownMenuSize = coords.size.toSize()
+                        }
+                        .padding(16.dp)
+                        .fillMaxWidth()
+
+                ) {
+                    Text(text = selectedProduct)
+                    Icon(
+                        if (isDropDownExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
+                        contentDescription = null
+                    )
+                }
+                DropdownMenu(
+                    expanded = isDropDownExpanded,
+                    onDismissRequest = { toggleDropDown() },
+                    modifier = Modifier
+                        .width(with(LocalDensity.current) { dropDownMenuSize.width.toDp() })
+                ) {
+                    productsList.forEach { label ->
+                        DropdownMenuItem(
+                            text = { Text(label) },
+                            onClick = {
+                                setSelectedProduct(label)
+                                toggleDropDown()
+                            })
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(12.dp))
@@ -216,7 +225,16 @@ fun AddProductScreenContent(
                 keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(12.dp))
-            Button (
+            val context = LocalContext.current
+            val pickMedia =
+                rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                    if (uri != null) {
+                        val file =
+                            getFileFromUri(contentResolver = context.contentResolver, uri = uri)
+                        setImage(file)
+                    }
+                }
+            Button(
                 onClick = {
                     pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 },
@@ -250,7 +268,7 @@ fun AddProductScreenContent(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Button (
+            Button(
                 onClick = {
                     handleAddProduct()
                 },
