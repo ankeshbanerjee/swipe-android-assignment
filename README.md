@@ -48,6 +48,7 @@ cd swipe-android-assignment
 - Lifecycle for Kotlin coroutines
 - Coil for image loading
 - Room for local database
+- Work Manager for data sync in background
 - Navigation Component from Jetpack: for navigation between screens
 - Jetpack Compose for UI
 - Use of sealed classes get generic responses
