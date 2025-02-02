@@ -1,5 +1,7 @@
 # Setup Guide to Build and Run the App
 
+## [App Link](https://drive.google.com/file/d/1PQhPgHj4cUvQAphH-2jYNZJJy0htj4da/view?usp=sharing)
+
 ## Prerequisites
 - Android Studio (latest version)
 - Git installed on your system
@@ -38,3 +40,15 @@ cd swipe-android-assignment
 - Connect your Android device or start an emulator
 - Click "Run → Run 'app'" or press Shift+F10 (Windows/Linux) or Ctrl+R (macOS)
 - Select your target device and click "OK"
+
+## Technical Stack
+- MVVM architecture 
+- Retrofit for REST 
+- KOIN for Dependency Injection 
+- Lifecycle for Kotlin coroutines
+- Coil for image loading
+- Room for local database
+- Navigation Component from Jetpack: for navigation between screens
+- Jetpack Compose for UI
+- Use of sealed classes get generic responses
+- Use of Splash API
