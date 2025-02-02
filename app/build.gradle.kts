@@ -81,4 +81,6 @@ dependencies {
     implementation(libs.androidx.work)
     // material 3
     implementation(libs.compose.material3)
+    // splash api
+    implementation(libs.androidx.splashscreen)
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SplashScreen.CustomSplash" parent="Theme.SplashScreen.IconBackground">
+        <item name="windowSplashScreenBackground">#F9F9FF</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenIconBackgroundColor">#A1E3F9</item>
+        <item name="postSplashScreenTheme">@style/Theme.Swipeassignment</item>
+    </style>
+</resources>
