@@ -62,7 +62,10 @@ import com.example.swipeassignment.utils.getFileFromUri
 import org.koin.androidx.compose.koinViewModel
 import java.io.File
 
-
+/**
+ * Composable function for adding a product.
+ * @param vm ViewModel instance of [AddProductViewModel].
+ */
 @Composable
 fun AddProductScreen(vm: AddProductViewModel = koinViewModel()) {
     val name by vm.name.collectAsState()
@@ -114,6 +117,25 @@ fun AddProductScreen(vm: AddProductViewModel = koinViewModel()) {
     )
 }
 
+/**
+ * UI content for the Add Product screen.
+ * @param name Product name.
+ * @param sellingPrice Selling price of the product.
+ * @param taxRate Tax rate of the product.
+ * @param setName Callback to update product name.
+ * @param setSellingPrice Callback to update selling price.
+ * @param setTaxRate Callback to update tax rate.
+ * @param navigateBack Callback to navigate back.
+ * @param isDropDownExpanded State for dropdown expansion.
+ * @param selectedProduct Currently selected product.
+ * @param productsList List of available products.
+ * @param setSelectedProduct Callback to set selected product.
+ * @param toggleDropDown Callback to toggle dropdown.
+ * @param image Selected product image file.
+ * @param setImage Callback to update the image file.
+ * @param uiState UI state for loading indicator.
+ * @param handleAddProduct Callback to handle adding a product.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddProductScreenContent(
@@ -225,6 +247,7 @@ fun AddProductScreenContent(
                 keyboardType = KeyboardType.Number
             )
             Spacer(modifier = Modifier.height(12.dp))
+            // Image selection button
             val context = LocalContext.current
             val pickMedia =
                 rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -268,6 +291,7 @@ fun AddProductScreenContent(
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))
+            // Add product button
             Button(
                 onClick = {
                     handleAddProduct()
@@ -298,7 +322,9 @@ fun AddProductScreenContent(
     }
 }
 
-
+/**
+ * Preview composable for Add Product screen.
+ */
 @Preview
 @Composable
 private fun AddProductScreenPreview() {
